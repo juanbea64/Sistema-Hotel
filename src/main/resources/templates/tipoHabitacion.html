@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Tipos de Habitación</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+        h1 { color: #2c3e50; }
+        form { margin-bottom: 30px; }
+        label { display: block; margin-top: 10px; }
+        input, textarea { padding: 6px; margin-top: 4px; width: 100%; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+        .actions a, .actions form { display: inline-block; margin-right: 8px; }
+        .back-link { display: inline-block; margin-top: 20px; color: #2980b9; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Tipos de Habitación</h1>
+
+        <!-- Formulario para crear/editar tipo de habitación -->
+        <form th:action="@{/tipohabitacion/guardar}" th:object="${tipoHabitacion}" method="post">
+            <input type="hidden" th:field="*{idTipoHabitacion}" />
+
+            <label>Nombre:</label>
+            <input type="text" th:field="*{nombre}" required />
+
+            <label>Descripción:</label>
+            <textarea th:field="*{descripcion}" required></textarea>
+
+            <label>Precio:</label>
+            <input type="number" th:field="*{precio}" step="0.01" required />
+
+            <button type="submit" style="margin-top:15px;">Guardar</button>
+        </form>
+
+        <!-- Listado de tipos de habitación -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="tipo : ${tiposHabitacion}">
+                    <td th:text="${tipo.idTipoHabitacion}"></td>
+                    <td th:text="${tipo.nombre}"></td>
+                    <td th:text="${tipo.descripcion}"></td>
+                    <td th:text="${tipo.precio}"></td>
+                    <td class="actions">
+                        <a th:href="@{/tipohabitacion/editar/{id}(id=${tipo.idTipoHabitacion})}">Editar</a>
+                        <form th:action="@{/tipohabitacion/eliminar/{id}(id=${tipo.idTipoHabitacion})}" method="post" style="display:inline;">
+                            <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este tipo de habitación?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="back-link" th:href="@{/bienvenida}">&larr; Volver al menú de administrador</a>
+    </div>
+</body>
+</html>
