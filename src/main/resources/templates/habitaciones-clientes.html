@@ -30,35 +30,7 @@
         <h1>Gestión de Habitaciones</h1>
 
         <!-- Formulario para crear/editar habitación -->
-        <form th:action="@{/habitaciones/guardar}" th:object="${habitacion}" method="post">
-            <input type="hidden" th:field="*{idHabitacion}" />
-
-            <label>Número:</label>
-            <input type="number" th:field="*{numero}" required />
-
-            <label>Piso:</label>
-            <input type="number" th:field="*{piso}" required />
-
-            <label>Tipo de Habitación:</label>
-            <select th:field="*{tipoHabitacion.idTipoHabitacion}" required>
-                <option value="" disabled selected>Seleccione un tipo</option>
-                <option th:each="tipo : ${tiposHabitacion}"
-                        th:value="${tipo.idTipoHabitacion}"
-                        th:text="${tipo.nombre}"></option>
-            </select>
-
-            <label>Estado:</label>
-            <select th:field="*{estado}" required>
-                <option value="" disabled selected>Seleccione un estado</option>
-                <option value="disponible">Disponible</option>
-                <option value="ocupada">Ocupada</option>
-                <option value="mantenimiento">Mantenimiento</option>
-                <option value="limpieza">Limpieza</option>
-            </select>
-
-            <button type="submit" style="margin-top:15px;">Guardar</button>
-        </form>
-
+        
         <!-- Listado de habitaciones -->
         <table>
             <thead>
@@ -68,7 +40,7 @@
                     <th>Piso</th>
                     <th>Tipo</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
+                    <th>Reserva</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,11 +52,8 @@
                     <td th:text="${hab.piso}"></td>
                     <td th:text="${hab.tipoHabitacion.nombre}"></td>
                     <td th:text="${hab.estado}"></td>
-                    <td class="actions">
-                        <a th:href="@{/habitaciones/editar/{id}(id=${hab.idHabitacion})}">Editar</a>
-                        <form th:action="@{/habitaciones/eliminar/{id}(id=${hab.idHabitacion})}" method="post" style="display:inline;">
-                            <button type="submit" onclick="return confirm('¿Seguro que desea eliminar esta habitación?');">Eliminar</button>
-                        </form>
+                    <td>
+                        <a th:href="@{/reservas/nueva/{id}(id=${hab.idHabitacion})}" class="btn-reservar">Reservar</a>
                     </td>
                 </tr>
             </tbody>

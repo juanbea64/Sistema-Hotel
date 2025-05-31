@@ -21,6 +21,10 @@ public class Habitacion {
     @JoinColumn(name = "id_tipo_habitacion")
     private TipoHabitacion tipoHabitacion;
 
+
     @Column(name = "estado", nullable = false)
     private String estado;
+
+    @Column(name = "imagen")
+    private String imagen;
 }
