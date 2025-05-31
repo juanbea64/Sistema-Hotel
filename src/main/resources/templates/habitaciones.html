@@ -56,17 +56,19 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Número</th>
-                    <!-- Agrega aquí más columnas si tu entidad los tiene -->
+                    <th>Piso</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="hab : ${habitaciones}">
-                    <td th:text="${hab.idHabitacion}"></td>
                     <td th:text="${hab.numero}"></td>
-                    <!-- Más columnas aquí si es necesario -->
+                    <td th:text="${hab.piso}"></td>
+                    <td th:text="${hab.tipoHabitacion.nombre}"></td>
+                    <td th:text="${hab.estado}"></td>
                     <td class="actions">
                         <a th:href="@{/habitaciones/editar/{id}(id=${hab.idHabitacion})}">Editar</a>
                         <form th:action="@{/habitaciones/eliminar/{id}(id=${hab.idHabitacion})}" method="post" style="display:inline;">

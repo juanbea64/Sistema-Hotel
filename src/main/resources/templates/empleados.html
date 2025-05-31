@@ -116,7 +116,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Cargo</th>
@@ -126,7 +125,6 @@
             </thead>
             <tbody>
                 <tr th:each="emp : ${empleados}">
-                    <td th:text="${emp.idEmpleado}"></td>
                     <td th:text="${emp.nombre}"></td>
                     <td th:text="${emp.apellido}"></td>
                     <td th:text="${emp.cargo}"></td>

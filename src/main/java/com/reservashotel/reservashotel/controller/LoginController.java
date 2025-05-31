@@ -27,7 +27,16 @@ public class LoginController {
                                 Model model) {
         Usuario usuario = usuarioService.buscarPorUsernameYPassword(username, password);
         if (usuario != null) {
-            return "redirect:/bienvenida";
+            if ("administrador".equalsIgnoreCase(usuario.getRol())) {
+                return "redirect:/bienvenida-administrador";
+            } else if ("recepcionista".equalsIgnoreCase(usuario.getRol())) {
+                return "redirect:/bienvenida-empleado";
+            } else if ("cliente".equalsIgnoreCase(usuario.getRol())) {
+                return "redirect:/bienvenida-cliente";
+            } else {
+                model.addAttribute("error", "Rol de usuario desconocido");
+                return "login";
+            }
         } else {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
             return "login";
