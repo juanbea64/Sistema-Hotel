@@ -4,15 +4,17 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Helvetica', 'Roboto', sans-serif;
+  font-family: 'Averia Sans Libre';
   font-size: 14px;
   line-height: 1.5;
   background-color: #f0f0f0;
 }
+
 .main_hero {
   background-image: url('../media/background.jpg');
   background-size: cover;
 }
+
 a {
   color: #fff;
   text-decoration: none;
@@ -21,16 +23,20 @@ img {
   max-width: 100%;
 }
 a.is-primary {
-  background-color: #03b2e3 !important;
-  border: 1px solid #03b2e3 !important;
+  background-color: #ffb62e !important;
+  border: 1px solid #d89345 !important;
 }
 a.is-primary:hover {
   background-color: transparent !important;
   color: #000 !important;
 }
+
+
 a.button {
   font-size: 14px;
 }
+
+
 .main_title {
   color: #fff;
 }

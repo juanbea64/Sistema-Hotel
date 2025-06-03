@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Reservas</title>
@@ -10,6 +11,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -18,46 +20,59 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px #ccc;
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             color: #2c3e50;
         }
+
         form {
             margin-bottom: 30px;
         }
+
         label {
             display: block;
             margin-top: 10px;
         }
-        input, select {
+
+        input,
+        select {
             padding: 6px;
             margin-top: 4px;
             width: 100%;
             box-sizing: border-box;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background: #f0f0f0;
         }
+
         .back-link {
             display: inline-block;
             margin-top: 20px;
             color: #2980b9;
             text-decoration: none;
         }
+
         .back-link:hover {
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Gestión de Reservas</h1>
@@ -67,14 +82,21 @@
             <label>Cliente:</label>
             <select th:field="*{cliente}" required>
                 <option value="" disabled selected>Seleccione un cliente</option>
-                <option th:each="cli : ${clientes}" th:value="${cli.idCliente}" th:text="${cli.nombre} + ' ' + ${cli.apellido}"></option>
+                <option th:each="cli : ${clientes}" th:value="${cli.idCliente}"
+                    th:text="${cli.nombre} + ' ' + ${cli.apellido}"></option>
             </select>
 
             <label>Habitación:</label>
-            <select th:field="*{habitacion}" required>
+            <select th:field="*{habitacion.idHabitacion}" required>
                 <option value="" disabled selected>Seleccione una habitación</option>
-                <option th:each="hab : ${habitaciones}" th:value="${hab.idHabitacion}" th:text="${hab.numero}"></option>
+                <option th:each="hab : ${habitaciones}" th:value="${hab.idHabitacion}" th:text="${hab.numero}"
+                    th:selected="${habitacionSeleccionada != null and hab.idHabitacion == habitacionSeleccionada.idHabitacion}">
+                </option>
             </select>
+
+
+
+
 
             <label>Fecha de Entrada:</label>
             <input type="date" th:field="*{fechaInicio}" required />
@@ -98,10 +120,21 @@
             </thead>
             <tbody>
                 <tr th:each="res : ${reservas}">
-                    <td th:text="${res.cliente != null ? res.cliente.nombre + ' ' + res.cliente.apellido : 'Sin cliente'}"></td>
+                    <td
+                        th:text="${res.cliente != null ? res.cliente.nombre + ' ' + res.cliente.apellido : 'Sin cliente'}">
+                    </td>
                     <td th:text="${res.habitacion != null ? res.habitacion.numero : 'Sin habitación'}"></td>
                     <td th:text="${#dates.format(res.fechaInicio, 'dd/MM/yyyy')}"></td>
                     <td th:text="${#dates.format(res.fechaFin, 'dd/MM/yyyy')}"></td>
+                    <td class="actions">
+                        <a th:href="@{/reservas/editar/{id}(id=${res.idReserva})}">Editar</a>
+                        <form th:action="@{/reservas/eliminar/{id}(id=${res.idReserva})}" method="post"
+                            style="display:inline;">
+                            <button type="submit"
+                                onclick="return confirm('¿Seguro que desea eliminar esta reserva?');">Eliminar</button>
+                        </form>
+                    </td>
+
                 </tr>
             </tbody>
         </table>
@@ -109,4 +142,5 @@
         <a class="back-link" th:href="@{/bienvenida}">&larr; Volver al menú principal</a>
     </div>
 </body>
+
 </html>

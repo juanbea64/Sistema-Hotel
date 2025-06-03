@@ -10,4 +10,9 @@ public class BienvenidaController {
     public String mostrarBienvenida() {
         return "bienvenida";
     }
+
+    @GetMapping("/logout-success")
+    public String logoutExitoso() {
+        return "redirect:/login"; // O muestra una vista personalizada
+    }
 }

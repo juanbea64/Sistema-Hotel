@@ -28,7 +28,7 @@ public class LoginController {
         Usuario usuario = usuarioService.buscarPorUsernameYPassword(username, password);
         if (usuario != null) {
             if ("administrador".equalsIgnoreCase(usuario.getRol())) {
-                return "redirect:/bienvenida-administrador";
+                return "redirect:/bienvenida";
             } else if ("recepcionista".equalsIgnoreCase(usuario.getRol())) {
                 return "redirect:/bienvenida-empleado";
             } else if ("cliente".equalsIgnoreCase(usuario.getRol())) {
