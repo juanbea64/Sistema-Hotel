@@ -6,10 +6,13 @@ import com.reservashotel.reservashotel.repository.ReservaRepository;
 import com.reservashotel.reservashotel.repository.ClienteRepository;
 import com.reservashotel.reservashotel.repository.HabitacionRepository;
 import com.reservashotel.reservashotel.service.HabitacionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/reservas")
@@ -30,9 +33,22 @@ public class ReservaController {
     // Mostrar listado y formulario
     @GetMapping
     public String listarReservas(Model model) {
-        model.addAttribute("reservas", reservaRepository.findAll());
+        List<Reserva> reservas = reservaRepository.findAll();
+        List<Habitacion> todasHabitaciones = habitacionRepository.findByEstadoIgnoreCase("disponible");
+
+        // Obtener las habitaciones ya reservadas (aunque estén disponibles por error)
+        List<Long> habitacionesReservadas = reservas.stream()
+                .map(reserva -> reserva.getHabitacion().getIdHabitacion())
+                .toList();
+
+        // Filtrar las que no están en reservas
+        List<Habitacion> habitacionesDisponibles = todasHabitaciones.stream()
+                .filter(habitacion -> !habitacionesReservadas.contains(habitacion.getIdHabitacion()))
+                .toList();
+
+        model.addAttribute("reservas", reservas);
         model.addAttribute("clientes", clienteRepository.findAll());
-        model.addAttribute("habitaciones", habitacionRepository.findAll());
+        model.addAttribute("habitaciones", habitacionesDisponibles);
         model.addAttribute("reserva", new Reserva());
         return "reservas";
     }
@@ -47,11 +63,11 @@ public class ReservaController {
         }
         model.addAttribute("reserva", reserva);
         model.addAttribute("clientes", clienteRepository.findAll());
-        model.addAttribute("habitaciones", habitacionRepository.findAll());
+        model.addAttribute("habitaciones", habitacionRepository.findByEstadoIgnoreCase("disponible"));
         return "reservas";
     }
 
-    // Guardar una reserva (crear o actualizar)
+    // Guardar una reserva
     @PostMapping("/guardar")
     public String guardarReserva(@ModelAttribute Reserva reserva) {
         Habitacion habitacion = reserva.getHabitacion();
@@ -59,11 +75,12 @@ public class ReservaController {
             habitacion.setEstado("ocupada");
             habitacionService.guardar(habitacion);
         }
+
         reservaRepository.save(reserva);
         return "redirect:/reservas";
     }
 
-    // Reservar habitación (reserva desde un botón específico)
+    // Reservar desde botón
     @PostMapping("/reservar")
     public String reservarHabitacion(@RequestParam Long habitacionId, @ModelAttribute Reserva reserva, Model model) {
         Habitacion habitacion = habitacionService.obtenerPorId(habitacionId);
@@ -135,6 +152,8 @@ public class ReservaController {
         model.addAttribute("reserva", reserva);
         model.addAttribute("clientes", clienteRepository.findAll());
         model.addAttribute("habitacionSeleccionada", habitacion);
-        return "reservas"; // Asegúrate de tener este archivo HTML
+        model.addAttribute("habitaciones", habitacionRepository.findByEstadoIgnoreCase("disponible"));
+
+        return "reservas";
     }
 }
